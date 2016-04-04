@@ -15,11 +15,12 @@ app.controller("MainController", ['$scope', '$rootScope', '$state', '$stateParam
 
     //initialize service?
     $pouchDB.startListening();
-
 // Listen for changes which include create or update events
     $rootScope.$on("$pouchDB:change", function (event, data) {
         $scope.items[data.doc._id] = data.doc;
         $scope.$apply();
+        //$pouchDB.stopListening();
+        //$pouchDB.startListening();
     });
 
 // Listen for changes which include only delete events
@@ -37,6 +38,7 @@ app.controller("MainController", ['$scope', '$rootScope', '$state', '$stateParam
 
 // Save a document with either an update or insert
     $scope.save = function (firstname, lastname, email) {
+        console.log("controller save!");
         var jsonDocument = {
             "firstname": firstname,
             "lastname": lastname,

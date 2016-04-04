@@ -49,7 +49,7 @@ angular.module("pouchapp", ["ui.router"])
 
     .service("$pouchDB", ["$rootScope", "$q", function ($rootScope, $q) {
 
-        var database, changeListener;
+        var database, changeListener, changeOnce;
 
         //set the database, which now inherits all properties of new PouchDB
         this.setDatabase = function (databaseName) {
@@ -64,16 +64,22 @@ angular.module("pouchapp", ["ui.router"])
         this.startListening = function () {
             //changes gives realtime updates to the database
             //adding since.now will only go from this point forward
-            changeListener = database.changes({
-                live: true,
-                include_docs: true
-            }).on("change", function (change) {
-                if (!change.deleted) {
-                    $rootScope.$broadcast("$pouchDB:change", change);
-                } else {
-                    $rootScope.$broadcast("$pouchDB:delete", change);
-                }
-            });
+            console.log("I'm listening again");
+            if (!changeOnce) {
+                changeListener = database.changes({
+                    live: true,
+                    _maxListeners: 1,
+                    include_docs: true
+                }).on("change", function (change) {
+                    if (!change.deleted) {
+                        $rootScope.$broadcast("$pouchDB:change", change);
+                    } else {
+                        $rootScope.$broadcast("$pouchDB:delete", change);
+                    }
+                });
+                console.log(changeListener);
+                changeOnce = true;
+            }
         };
         
         //cancel() is a method that gets inherited from changes(), 
@@ -93,22 +99,29 @@ angular.module("pouchapp", ["ui.router"])
         //The bulk of the code has to do with if/else on the _id character
         this.save = function (jsonDocument) {
             //establish deferred as a type of $q.defer()
+            console.log("factory save!");
             var deferred = $q.defer();
             //if there is not an _id given with the document, e.g., its new, 
             //post the document to the database
             if (!jsonDocument._id) {
                 database.post(jsonDocument).then(function (response) {
                     deferred.resolve(response);
+                    //changeListener.stopListening();
                 }).catch(function (error) {
                     deferred.reject(error);
                 });
             } else {
                 database.put(jsonDocument).then(function (response) {
                     deferred.resolve(response);
+                    //console.log(changeListener);
+                    changeListener.stopListening();
+                    //console.log(changeListener);
                 }).catch(function (error) {
                     deferred.reject(error);
                 });
             }
+            console.log(changeListener);
+            //changeListener.stopListening();
             return deferred.promise;
         };
         

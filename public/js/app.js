@@ -5,7 +5,7 @@
 /*jslint es5: true */
 'use strict';
 
-angular.module("pouchapp", ["ui.router"])
+angular.module("pouchapp", ["ui.router", "pouchdb"])
 
 
 //This piece of code says to run this function after loading.
@@ -140,4 +140,9 @@ angular.module("pouchapp", ["ui.router"])
             database.destroy();
         };
 
-    }]);
+    }])
+
+
+.service('$newPouchDB', function(pouchDB) {
+  var db = pouchDB('name');
+});

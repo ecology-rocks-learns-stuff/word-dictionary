@@ -1,6 +1,6 @@
 angular.controller('MainCtrl', function($log, $scope, pouchDB) {
-  var db = pouchDB('dbname');
-  var doc = { name: 'David' };
+  var db = pouchDB('dictionaryDb');
+
 
   function error(err) {
     $log.error(err);
@@ -17,8 +17,13 @@ angular.controller('MainCtrl', function($log, $scope, pouchDB) {
     $scope.doc = res;
   }
 
-  db.post(doc)
-    .then(get)
-    .then(bind)
-    .catch(error);
+    
+    this.postDoc = function (newDoc) {
+        db.post(newDoc)
+        .then(get)
+        .then(bind)
+        .catch(error);
+        
+    };
+
 });

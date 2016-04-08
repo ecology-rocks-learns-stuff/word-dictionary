@@ -1,4 +1,7 @@
-angular.controller('MainCtrl', function($log, $scope, pouchDB) {
+var app = angular.module("pouchapp");
+
+//start the main controller
+app.controller('NewDbCtrl', function($log, $scope, pouchDB) {
   var db = pouchDB('dictionaryDb');
 
 

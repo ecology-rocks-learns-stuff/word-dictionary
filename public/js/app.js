@@ -65,10 +65,10 @@ angular.module("pouchapp", ["ui.router", "pouchdb"])
             //changes gives realtime updates to the database
             //adding since.now will only go from this point forward
             console.log("I'm listening again");
-            if (!changeOnce) {
+            //if (!changeOnce) {
                 changeListener = database.changes({
                     live: true,
-                    _maxListeners: 1,
+                    //_maxListeners: 1,
                     include_docs: true
                 }).on("change", function (change) {
                     if (!change.deleted) {
@@ -78,8 +78,8 @@ angular.module("pouchapp", ["ui.router", "pouchdb"])
                     }
                 });
                 console.log(changeListener);
-                changeOnce = true;
-            }
+              //  changeOnce = true;
+            //}
         };
         
         //cancel() is a method that gets inherited from changes(), 

@@ -21,7 +21,7 @@ app.controller('NewDbCtrl', function($log, $scope, pouchDB) {
   }
 
     
-    this.postDoc = function (newDoc) {
+    $scope.postDoc = function (newDoc) {
         db.post(newDoc)
         .then(get)
         .then(bind)

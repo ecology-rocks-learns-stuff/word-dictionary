@@ -5,10 +5,12 @@
 /*jslint es5: true */
 'use strict';
 
+/* My problem is in this file and how the pouchDB service handles saves / listening */
+
 var app = angular.module("pouchapp");
 
 //start the main controller
-app.controller("MainController", ['$scope', '$rootScope', '$state', '$stateParams', '$pouchDB', function ($scope, $rootScope, $state, $stateParams, $pouchDB) {
+app.controller("MainController", ['$scope', '$log', '$rootScope', '$state', '$stateParams', '$pouchDB', function ($scope, $log, $rootScope, $state, $stateParams, $pouchDB) {
         
     //initiate $scope items
     $scope.items = {};
@@ -60,5 +62,29 @@ app.controller("MainController", ['$scope', '$rootScope', '$state', '$stateParam
         $pouchDB.delete(id, rev);
     };
 
+    
+    //code from other app
+      function error(err) {
+    $log.error(err);
+  }
+
+  function get(res) {
+    if (!res.ok) {
+      return error(res);
+    }
+  }
+
+  function bind(res) {
+    $scope.doc = res;
+  }
+
+    
+    $scope.postDoc = function (newDoc) {
+        $pouchDB.save(newDoc)
+        .then(get)
+        .then(bind)
+        .catch(error);
+        
+    };
 }]); //end controller
 

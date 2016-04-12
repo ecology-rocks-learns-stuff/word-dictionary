@@ -5,7 +5,7 @@
 /*jslint es5: true */
 'use strict';
 
-/* My problem is in this file and how the pouchDB service handles saves / listening */
+/* My problem is in this file and how the pouchDB service handles saves / listening */  
 
 var app = angular.module("pouchapp");
 

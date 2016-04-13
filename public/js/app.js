@@ -1,5 +1,4 @@
-/*jslint node: true*/
-/*jslint nomen: true*/
+/*jslint node: true nomen: true*/
 /*global angular*/
 /*global PouchDB*/
 /*jslint es5: true */
@@ -86,6 +85,7 @@ angular.module("pouchapp", ["ui.router", "pouchdb"])
         //it tells the changeListener to stop monitoring.
         this.stopListening = function () {
             changeListener.cancel();
+            changeListener = null;
         };
 
         //this would sync to a remote database, which needs
@@ -121,7 +121,7 @@ angular.module("pouchapp", ["ui.router", "pouchdb"])
                 });
             }
             console.log(changeListener);
-            //changeListener.stopListening();
+            //changeListener.stopLifstening();
             return deferred.promise;
         };
         
